@@ -15,35 +15,41 @@ use Illuminate\Support\Facades\Route;
 
 // Home
 Route::get('/', function () {
-    return view('pages/home');
+  return view('pages/home');
 });
 
 // Show All Listings
 Route::get('/{property_type}/{listing_type}/{city}', function () {
-    return view('pages/listings');
+  return view('pages/listings');
 });
 
 // Single Listing
 Route::get('/{listing}/{slug}/{id}', function () {
-    return view('welcome');
+  return view('pages/single-listing');
 });
 
 // User Login
 Route::get('/login', function () {
-    return view('welcome');
+  return view('pages/login');
 });
 
 // User Register
 Route::get('/register', function () {
-    return view('welcome');
+  return view('pages/register');
 });
 
 // User Saved Listings
 Route::get('/account/saved', function () {
-    return view('welcome');
+  return view('pages/saved-listings');
 });
 
 // Showing Status
 Route::get('/account/show-status', function () {
-    return view('welcome');
+  return view('pages/show-status');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

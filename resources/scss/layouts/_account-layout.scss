@@ -1,4 +1,4 @@
-.listings-page {
+.account-layout {
   .listings-city {
     position: relative;
     background: #1b1b1b;
@@ -61,6 +61,19 @@
       margin-left: 1rem;
     }
   }
+  .content {
+    padding: 70px 0;
+  }
+  .account__menu {
+    h2 {
+      font-weight: 700;
+    }
+    a { 
+      display: block;
+      font-size: 1.1rem;
+      text-decoration: none;
+    }
+  }
   .listings-properties {
     img {
       width: 100%;
@@ -73,11 +86,11 @@
       display: block;
       padding: 20px;
       border-radius: 15px;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
       margin-bottom: 2rem;
       position: relative;
       text-decoration: none;
-      color: rgba(0, 0, 0, 0.86);
+      color: rgba(0, 0, 0, 0.8);
       transition: all 0.3s ease-in-out;
       &:hover {
         color: rgb(219, 105, 29);
