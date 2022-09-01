@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Listing;
+use App\Models\User;
 use App\Helper\Helper;
 
 class ListingController extends Controller
@@ -16,8 +17,8 @@ class ListingController extends Controller
      */
     public function index()
     {
+      return User::find(2)->listings;
         $listings = Listing::paginate(5);
-
         return view('admin/listings/index', [
           'listings' => $listings
         ]);
@@ -52,6 +53,7 @@ class ListingController extends Controller
         ]);
 
         $listing = new Listing();
+        $listing->user_id = auth()->user()->id;
         $listing->address = $request->get('address');
         $listing->address2 = $request->get('address2');
         $listing->city = $request->get('city');
