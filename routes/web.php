@@ -13,11 +13,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group([
+  'prefix' => 'admin',
+  'as' => 'admin.'
+], function() {
+  Route::get('/', function () {
+      return view('admin/dashboard');
+  })->name('dashboard');
 
+  Route::group([
+      'prefix' => 'listings',
+      'as' => 'listings.'
+  ], function(){
+      Route::get('/', [\App\Http\Controllers\Admin\ListingController::class, 'index'])->name('index');
+
+      Route::get('/create', [\App\Http\Controllers\Admin\ListingController::class, 'create'])->name('create');
+   
+      Route::post('/', [\App\Http\Controllers\Admin\ListingController::class, 'store'])->name('store');
+    
+      Route::get('/{slug}/{id}/edit', [\App\Http\Controllers\Admin\ListingController::class, 'edit'])->name('edit');
+      
+      Route::put('/{slug}/{id}', [\App\Http\Controllers\Admin\ListingController::class, 'update'])->name('update');
+      
+      Route::get('/{slug}/{id}/delete', [\App\Http\Controllers\Admin\ListingController::class, 'destroy'])->name('delete');
+  });
+});
 
 // Home
 Route::get('/', function () {
   return view('pages/home');
+});
+
+// Single Listing
+Route::get('/listing/{slug}/{id}', function () {
+  return view('pages/single-listing');
 });
 
 // Show All Listings
@@ -25,17 +54,12 @@ Route::get('/{property_type}/{listing_type}/{city}', function () {
   return view('pages/listings');
 })->name('listings');
 
-// Single Listing
-Route::get('/{listing}/{slug}/{id}', function () {
-  return view('pages/single-listing');
-});
-
 // User Saved Listings
 Route::get('/account', function () {
   return view('pages/saved-listings');
 })->name('account');
 
-// Showing Status
+// User Showing Status
 Route::get('/account/show-status', function () {
   return view('pages/show-status');
 })->name('show-status');
