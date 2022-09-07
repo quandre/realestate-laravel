@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
   'prefix' => 'admin',
+  'middleware' => ['auth', 'is_admin'],
   'as' => 'admin.'
 ], function() {
   Route::get('/', function () {
@@ -28,7 +29,7 @@ Route::group([
       Route::get('/', [\App\Http\Controllers\Admin\ListingController::class, 'index'])->name('index');
 
       Route::get('/create', [\App\Http\Controllers\Admin\ListingController::class, 'create'])->name('create');
-   
+
       Route::post('/', [\App\Http\Controllers\Admin\ListingController::class, 'store'])->name('store');
     
       Route::get('/{slug}/{id}/edit', [\App\Http\Controllers\Admin\ListingController::class, 'edit'])->name('edit');
@@ -36,6 +37,20 @@ Route::group([
       Route::put('/{slug}/{id}', [\App\Http\Controllers\Admin\ListingController::class, 'update'])->name('update');
       
       Route::get('/{slug}/{id}/delete', [\App\Http\Controllers\Admin\ListingController::class, 'destroy'])->name('delete');
+
+      //  Starting Listing Photos
+
+      Route::get('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'index'])->name('photos');
+    
+      Route::get('/{slug}/{id}/photos/create', [\App\Http\Controllers\Admin\PhotoController::class, 'create'])->name('photos.create');
+
+      Route::post('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'store'])->name('photos.store');
+      
+      Route::get('/{slug}/{id}/photos/{photo_id}/edit', [\App\Http\Controllers\Admin\PhotoController::class, 'edit'])->name('photos.edit');
+
+      Route::put('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'update'])->name('photos.update');
+      
+      Route::get('/{slug}/{id}/photos/{photo_id}/delete', [\App\Http\Controllers\Admin\PhotoController::class, 'destroy'])->name('photos.delete');
   });
 });
 

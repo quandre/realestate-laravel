@@ -18,25 +18,35 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($listings as $listing)
+            @foreach ($listings as $listing)
             <tr>
-              <th scope="row">{{$listing->id}}</th>
+              <th scope="row">{{ $listing->id }}</th>
               <td>
-                <a href="{{route('admin.listings.edit', [
-                  'slug' => $listing->slug,
-                  'id' => $listing->id
-                  ])}}">
-                  {{$listing->address}}, {{$listing->address2}}<br>
-                  {{$listing->city}}, {{$listing->state}}, 
-                  {{$listing->zipcode}}
+                <a href="{{ route('admin.listings.edit', [
+                                                'slug' => $listing->slug,
+                                                'id' => $listing->id,
+                                            ]) }}">
+                  {{ $listing->address }}, {{ $listing->address2 }}<br>
+                  {{ $listing->city }}, {{ $listing->state }},
+                  {{ $listing->zipcode }}
                 </a>
               </td>
-              <td>Active</td>
+              <td>
+                @if ($listing->status == 'published')
+                <div class="btn cur-p btn-success" style=" width: 100%; text-transform: capitalize; font-size: .8rem;">
+                  {{ $listing->status }}
+                </div>
+                @else
+                <div class="btn cur-p btn-warning" style=" width: 100%; text-transform: capitalize; font-size: .8rem;">
+                  {{ $listing->status }}
+                </div>
+                @endif
+              </td>
             </tr>
             @endforeach
           </tbody>
         </table>
-        {{$listings->links()}}
+        {{ $listings->links() }}
       </div>
     </div>
   </div>
