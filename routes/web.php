@@ -14,73 +14,71 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
-  'prefix' => 'admin',
-  'middleware' => ['auth', 'is_admin'],
-  'as' => 'admin.'
+    'prefix' => 'admin',
+    'middleware' => ['auth', 'is_admin'],
+    'as' => 'admin.'
 ], function() {
-  Route::get('/', function () {
-      return view('admin/dashboard');
-  })->name('dashboard');
+    Route::get('/', function () {
+        return view('admin/dashboard');
+    })->name('dashboard');
 
-  Route::group([
-      'prefix' => 'listings',
-      'as' => 'listings.'
-  ], function(){
-      Route::get('/', [\App\Http\Controllers\Admin\ListingController::class, 'index'])->name('index');
+    Route::group([
+        'prefix' => 'listings',
+        'as' => 'listings.'
+    ], function(){
+        Route::get('/', [\App\Http\Controllers\Admin\ListingController::class, 'index'])->name('index');
 
-      Route::get('/create', [\App\Http\Controllers\Admin\ListingController::class, 'create'])->name('create');
+        Route::get('/create', [\App\Http\Controllers\Admin\ListingController::class, 'create'])->name('create');
 
-      Route::post('/', [\App\Http\Controllers\Admin\ListingController::class, 'store'])->name('store');
-    
-      Route::get('/{slug}/{id}/edit', [\App\Http\Controllers\Admin\ListingController::class, 'edit'])->name('edit');
-      
-      Route::put('/{slug}/{id}', [\App\Http\Controllers\Admin\ListingController::class, 'update'])->name('update');
-      
-      Route::get('/{slug}/{id}/delete', [\App\Http\Controllers\Admin\ListingController::class, 'destroy'])->name('delete');
+        Route::post('/', [\App\Http\Controllers\Admin\ListingController::class, 'store'])->name('store');
 
-      //  Starting Listing Photos
+        Route::get('/{slug}/{id}/edit', [\App\Http\Controllers\Admin\ListingController::class, 'edit'])->name('edit');
 
-      Route::get('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'index'])->name('photos');
-    
-      Route::get('/{slug}/{id}/photos/create', [\App\Http\Controllers\Admin\PhotoController::class, 'create'])->name('photos.create');
+        Route::put('/{slug}/{id}', [\App\Http\Controllers\Admin\ListingController::class, 'update'])->name('update');
 
-      Route::post('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'store'])->name('photos.store');
-      
-      Route::get('/{slug}/{id}/photos/{photo_id}/edit', [\App\Http\Controllers\Admin\PhotoController::class, 'edit'])->name('photos.edit');
+        Route::get('/{slug}/{id}/delete', [\App\Http\Controllers\Admin\ListingController::class, 'destroy'])->name('delete');
 
-      Route::put('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'update'])->name('photos.update');
-      
-      Route::get('/{slug}/{id}/photos/{photo_id}/delete', [\App\Http\Controllers\Admin\PhotoController::class, 'destroy'])->name('photos.delete');
-  });
+        // Starting Listing Photos
+
+        Route::get('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'index'])->name('photos');
+        
+        Route::get('/{slug}/{id}/photos/create', [\App\Http\Controllers\Admin\PhotoController::class, 'create'])->name('photos.create');
+
+        Route::post('/{slug}/{id}/photos', [\App\Http\Controllers\Admin\PhotoController::class, 'store'])->name('photos.store');
+        
+        Route::get('/{slug}/{id}/photos/{photo_id}/delete', [\App\Http\Controllers\Admin\PhotoController::class, 'destroy'])->name('photos.delete');
+
+        Route::get('/{slug}/{id}/photos/{photo_id}/featured', [\App\Http\Controllers\Admin\PhotoController::class, 'featured'])->name('photos.featured');
+
+    });
 });
 
-// Home
+
+
 Route::get('/', function () {
-  return view('pages/home');
+    return view('pages/home');
 });
 
-// Single Listing
-Route::get('/listing/{slug}/{id}', function () {
-  return view('pages/single-listing');
-});
+
+// Single listing 
+
+Route::get('/listing/{slug}/{id}', [\App\Http\Controllers\Front\ListingController::class, 'show'])->name('frontlisting.show');
 
 // Show All Listings
-Route::get('/{property_type}/{listing_type}/{city}', function () {
-  return view('pages/listings');
-})->name('listings');
+Route::get('/{property_type}/{listing_type?}/{state?}/{city?}/{zipcode?}', [\App\Http\Controllers\Front\ListingController::class, 'index'])->name('frontlisting.index');
+
 
 // User Saved Listings
 Route::get('/account', function () {
-  return view('pages/saved-listings');
+    return view('pages/saved-listings');
 })->name('account');
-
 // User Showing Status
 Route::get('/account/show-status', function () {
-  return view('pages/show-status');
+    return view('pages/show-status');
 })->name('show-status');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+
+
+
 
 require __DIR__.'/auth.php';

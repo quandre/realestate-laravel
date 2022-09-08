@@ -18,15 +18,16 @@ class PhotoController extends Controller
      */
     public function index($slug, $id)
     {
-      $photos = Photo::where(['user_id' => auth()->user()->id, 'listing_id' => $id])->paginate(5);
-
-      if($photos->total() < 1) {
-        return redirect("/admin/listings/{$slug}/{$id}/photos/create");
-      }
-
-      return view('admin/listings/photos/index', [
-          'photos' => $photos
-      ]);
+        $photos = Photo::where(['user_id' => auth()->user()->id, 'listing_id' => $id])->paginate(5);
+        
+        if($photos->total() < 1) {
+            return redirect("/admin/listings/{$slug}/{$id}/photos/create");
+        }
+        return view('admin/listings/photos/index', [
+            'photos' => $photos,
+            'slug' => $slug, 
+            'id' => $id
+        ]);
     }
 
     /**
@@ -37,8 +38,8 @@ class PhotoController extends Controller
     public function create($slug, $id)
     {
         return view('admin/listings/photos/create', [
-          'slug' => $slug,
-          'id' => $id
+            'slug' => $slug,
+            'id' => $id
         ]);
     }
 
@@ -50,65 +51,33 @@ class PhotoController extends Controller
      */
     public function store(Request $request, $slug, $id)
     {
-      // $this->authorize('create', photo::class);
+        // $this->authorize('create', Listing::class);
 
-      request()->validate([
-        'image' => 'required|image',
-    ]);
-    
-    $newName = time() . '-' . $request->file('image')->getClientOriginalName();
-    $size = $request->file('image')->getSize();
-    $name = $newName;
-    $request->file('image')->move(public_path('img'), $name);
+        request()->validate([
+            'image' => 'required|image',
+        ]);
+        
+        $newName = time() . '-' . $request->file('image')->getClientOriginalName();
+        $size = $request->file('image')->getSize();
+        $name = $newName;
+        $request->file('image')->move(public_path('img'), $name);
 
-    $photo = new Photo();
-    $photo->name = $name;
-    $photo->size = $size;
-    $photo->user_id = auth()->user()->id;
-    $photo->listing_id = $id;
-      $photo->save();
+        $photo = new Photo();
+        $photo->name = $name;
+        $photo->size = $size;
+        $photo->user_id = auth()->user()->id;
+        $photo->listing_id = $id;
+        $photo->featured = 0;
+        $photo->save();
 
+        // $listing->slug = Helper::slugify("{$request->address}-{$request->address2}-{$request->city}-{$request->state}-{$request->zipcode}");
+        
 
-      // $listing->slug = Helper::slugify("{$request->address}-{$request->address2}-{$request->city}-{$request->state}-{$request->zipcode}");
+        
 
-      
-
-      return redirect("/admin/listings/{$slug}/{$id}/photos")->with('success', 'Created New Listing Successfully');
+        return redirect("/admin/listings/{$slug}/{$id}/photos")->with('success', 'Created New Listing Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -116,8 +85,34 @@ class PhotoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug, $id, $photo_id)
     {
-        //
+        $photo = Photo::find($photo_id);
+        $this->authorize('delete', $listing);
+        $photo->delete();
+
+        return redirect("/admin/listings/{$slug}/{$id}/photos")->with('success', 'Photo Has Been Deleted Successfully');
+    }
+
+    public function featured($slug, $id, $photo_id)
+    {
+        $old_photo = Photo::where([
+            'listing_id' => $id,
+            'featured' => 1,
+            ])->first();
+            if($old_photo != null){
+                $old_photo->featured = 0;
+                $old_photo->save();
+            }
+        
+
+        $new_photo = Photo::where([
+            'listing_id' => $id,
+            'id' => $photo_id,
+            ])->first();
+        $new_photo->featured = 1;
+        $new_photo->save();
+
+        return redirect("/admin/listings/{$slug}/{$id}/photos")->with('success', 'Photo Has Been Made Featured Successfully');
     }
 }
