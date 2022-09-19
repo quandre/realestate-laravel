@@ -154,7 +154,6 @@ class ListingController extends Controller
      */
     public function destroy($slug, $id)
     {
-         
     $listing = Listing::find($id);
     $this->authorize('delete', $listing);
     $listing->delete();

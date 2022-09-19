@@ -70,7 +70,7 @@ class PhotoController extends Controller
         $photo->featured = 0;
         $photo->save();
 
-        // $listing->slug = Helper::slugify("{$request->address}-{$request->address2}-{$request->city}-{$request->state}-{$request->zipcode}");
+        //$listing->slug = Helper::slugify("{$request->address}-{$request->address2}-{$request->city}-{$request->state}-{$request->zipcode}");
         
 
         
@@ -88,7 +88,6 @@ class PhotoController extends Controller
     public function destroy($slug, $id, $photo_id)
     {
         $photo = Photo::find($photo_id);
-        $this->authorize('delete', $listing);
         $photo->delete();
 
         return redirect("/admin/listings/{$slug}/{$id}/photos")->with('success', 'Photo Has Been Deleted Successfully');

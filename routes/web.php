@@ -61,12 +61,10 @@ Route::get('/', function () {
 
 
 // Single listing 
-
 Route::get('/listing/{slug}/{id}', [\App\Http\Controllers\Front\ListingController::class, 'show'])->name('frontlisting.show');
 
 // Show All Listings
-Route::get('/{property_type}/{listing_type?}/{state?}/{city?}/{zipcode?}', [\App\Http\Controllers\Front\ListingController::class, 'index'])->name('frontlisting.index');
-
+Route::get('/{property_type}/{listing_type}/{state?}/{city?}/{zipcode?}', [\App\Http\Controllers\Front\ListingController::class, 'index'])->name('frontlisting.index');
 
 // User Saved Listings
 Route::get('/account', function () {
@@ -76,7 +74,6 @@ Route::get('/account', function () {
 Route::get('/account/show-status', function () {
     return view('pages/show-status');
 })->name('show-status');
-
 
 
 

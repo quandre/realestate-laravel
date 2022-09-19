@@ -58,7 +58,7 @@
         <div class="col-md-5">
           <span class="listing-info__agent-title">Agent</span>
           <span class="listing-info__agent-name">{{$listing->user->name}}</span>
-          {{-- <p class="listing-info__agent-profile">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores, nostrum hic voluptates enim delectus iusto sequi veritatis commodi ipsa tempore quam dolorem ex, dolorum earum quod aliquam. Itaque, modi quod.</p> --}}
+          <p class="listing-info__agent-profile"></p>
         </div>
       </div>
     </div>
