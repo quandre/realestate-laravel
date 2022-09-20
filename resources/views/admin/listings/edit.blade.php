@@ -14,7 +14,36 @@
           <h1>Edit Listing</h1>
 
           <div class="mT-30">
-
+            <div class="mb-3"><label class="form-label" for="prices">Price</label><input type="text"
+              class="form-control" name="price" id="price" placeholder="ex: 100000.00" value="{{old('price', $listing->price)}}">
+              @error('price')
+              <div class="error-sub-text">
+                  {{ $message }}
+              </div>
+          @enderror
+            </div>
+            <div class="mb-3"><label class="form-label" for="property_type">Property Type</label>
+              <select name="property_type" id="property_type" class="form-control">
+                <option value="home" @if (old('property_type', $listing->property_type) == "home") selected @endif>Home</option>
+                <option value="condo" @if (old('property_type', $listing->property_type) == "condo") selected @endif >Condo</option>
+              </select>
+              @error('property_type')
+              <div class="error-sub-text">
+                  {{ $message }}
+              </div>
+          @enderror
+        </div>
+            <div class="mb-3"><label class="form-label" for="listing_type">Listing Type</label>
+              <select name="listing_type" id="listing_type" class="form-control">
+                <option value="for_sale" @if (old('listing_type', $listing->listing_type) == "for_sale") selected @endif>For Sale</option>
+                <option value="for_rent" @if (old('listing_type', $listing->listing_type) == "for_rent") selected @endif >For Rent</option>
+              </select>
+              @error('listing_type')
+              <div class="error-sub-text">
+                  {{ $message }}
+              </div>
+          @enderror
+            </div>
             <div class="mb-3">
               <h3>Address</h3>
               <label class="form-label" for="Address">Address</label> <input type="text" class="form-control"
@@ -116,9 +145,6 @@
                 @enderror
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>
@@ -128,12 +154,12 @@
           <div class="mT-30">
             <h3>Settings</h3>
             <div class="form-group">
-              <label class="form-label" for="status">Status</label>
-              <select name="status" id="status" class="form-control">
-                <option value="draft" @selected(old('status', $listing->status) == 'draft')>Draft</option>
-                <option value="published" @selected(old('status', $listing->status) == 'published')>Published</option>
+              <label class="form-label" for="published">published</label>
+              <select name="published" id="published" class="form-control">
+                <option value="0" @selected(old('published', $listing->published) == '0')>Draft</option>
+                <option value="1" @selected(old('published', $listing->published) == '1')>Published</option>
               </select>
-              @error('status')
+              @error('published')
               <div class="error-sub-text">
                 {{$message}}
               </div>

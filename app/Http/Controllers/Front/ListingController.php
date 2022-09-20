@@ -21,14 +21,14 @@ class ListingController extends Controller
         $max_beds = (is_null($request->input('max_beds'))) ? 100 : $request->input('max_beds');
         $min_baths = (is_null($request->input('min_baths'))) ? 0 : $request->input('min_baths');
         $max_baths = (is_null($request->input('max_baths'))) ? 100 : $request->input('max_baths');
-        // $min_price = (is_null($request->input('min_price'))) ? 0 : $request->input('min_price');
-        // $max_price = (is_null($request->input('max_price'))) ? 100000000000 : $request->input('max_price');
+        $min_price = (is_null($request->input('min_price'))) ? 0 : $request->input('min_price');
+        $max_price = (is_null($request->input('max_price'))) ? 100000000000 : $request->input('max_price');
         $min_squarefootage = (is_null($request->input('min_squarefootage'))) ? 0 : $request->input('min_squarefootage');
         $max_squarefootage = (is_null($request->input('max_squarefootage'))) ? 10000000 : $request->input('max_squarefootage');
 
         $filters = [
-            // 'property_type' => $property_type,
-            // 'listing_type' => $listing_type,
+            'property_type' => $property_type,
+            'listing_type' => $listing_type,
             'state' => $state,
             'city' => $city,
             'zipcode' => $zipcode
@@ -42,12 +42,14 @@ class ListingController extends Controller
                 }
             }
         })
-        ->where("status", "published")
+        ->where("status", "on-market")
+        ->where("published", 1)
         ->whereBetween("bedrooms", [$min_beds, $max_beds])
         ->whereBetween("bathrooms", [$min_baths, $max_baths])
         ->whereBetween("squarefootage", [$min_squarefootage, $max_squarefootage])
-        // ->whereBetween("price", [$min_price, $max_price])
+        ->whereBetween("price", [$min_price, $max_price])
         ->get();
+        return $listings;
         return view('pages/listings');
     }
     /**
@@ -80,7 +82,6 @@ class ListingController extends Controller
     public function show($slug, $id)
     {
         $listing = Listing::where([
-          //'listing' => $listing,
             'id' => $id,
             'slug' => $slug
             ])->first();

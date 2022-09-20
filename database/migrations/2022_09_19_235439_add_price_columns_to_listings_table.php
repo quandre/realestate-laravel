@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('listings', function (Blueprint $table) {
-            //
+      Schema::table('listings', function (Blueprint $table) {
+          $table->decimal('price');
+          $table->boolean('published');
+          $table->string('property_type');
+          $table->string('listing_type');
         });
     }
 
@@ -26,7 +29,10 @@ return new class extends Migration
     public function down()
     {
         Schema::table('listings', function (Blueprint $table) {
-            //
+          $table->dropColumn('price');
+          $table->dropColumn('published');
+          $table->dropColumn('property_type');
+          $table->dropColumn('listing_type');
         });
     }
 };
